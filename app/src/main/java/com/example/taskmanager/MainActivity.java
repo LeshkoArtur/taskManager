@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
             case "high":
                 return 3;
             default:
-                return 0; // Якщо щось неочікуване
+                return 0;
         }
     }
     private void sortByStatus(String direction) {

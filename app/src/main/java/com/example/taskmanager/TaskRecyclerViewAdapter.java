@@ -46,8 +46,6 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         holder.priorityTextView.setText(priority);
         setTextColorBasedOnPriority(holder.priorityTextView, priority);
         holder.aSwitch.setOnCheckedChangeListener(null);
-
-        // Встановлюємо стан світча відповідно до стану завдання
         holder.aSwitch.setChecked(task.isDone());
         holder.aSwitch.setEnabled(!task.isDone());
 
@@ -56,25 +54,22 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         });
     }
     private void showConfirmationDialog(Switch aSwitch, Task task) {
-        boolean initialState = task.isDone(); // Початковий стан
-
+        boolean initialState = task.isDone();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Ви впевнені, що хочете змінити статус цього завдання?")
                 .setCancelable(false)
                 .setPositiveButton("Так", (dialog, id) -> {
-                    // Оновлюємо статус у базі даних
-                    task.setDone(true); // Завдання виконане
+                    task.setDone(true);
                     executor.execute(() -> {
                         taskDao.update(task);
                         ((Activity) context).runOnUiThread(() -> {
                             aSwitch.setChecked(true);
-                            aSwitch.setEnabled(false); // Блокуємо подальші зміни
+                            aSwitch.setEnabled(false);
                             Toast.makeText(context, "Статус змінено", Toast.LENGTH_SHORT).show();
                         });
                     });
                 })
                 .setNegativeButton("Ні", (dialog, id) -> {
-                    // Повертаємо попередній стан без виклику слухача змін
                     aSwitch.setOnCheckedChangeListener(null);
                     aSwitch.setChecked(initialState);
                     aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {

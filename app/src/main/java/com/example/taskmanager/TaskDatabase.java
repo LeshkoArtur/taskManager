@@ -28,11 +28,10 @@ public abstract class TaskDatabase extends RoomDatabase {
         if (taskDatabase == null) {
             synchronized (TaskDatabase.class) {
                 if (taskDatabase == null) {
-                    // Використовуємо context.getApplicationContext() для створення бази даних
                     taskDatabase = Room.databaseBuilder(context.getApplicationContext(),
                                     TaskDatabase.class, "tasks")
-                            .addMigrations(MIGRATION_1_2)  // Додаємо міграцію
-                            .fallbackToDestructiveMigration()  // Видалення БД при зміні версії
+                            .addMigrations(MIGRATION_1_2)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
